@@ -1,4 +1,4 @@
-EXERCISE_OPTIONS = [
+EXERCISE_OPTIONS=[
     "Squats",
     "Push-ups",
     "Biceps Curls (Dumbbell)",
@@ -6,11 +6,13 @@ EXERCISE_OPTIONS = [
     "Lunges"
 ]
 
+
 POSE_CONNECTIONS = [
     (11, 12), (11, 13), (13, 15), (12, 14), (14, 16),       # Shoulders & Arms
     (11, 23), (12, 24), (23, 24),                           # Torso / Hips
     (23, 25), (24, 26), (25, 27), (26, 28), (27, 29), (28, 30), (29, 31), (30, 32), (27, 31), (28, 32)  # Legs
 ]
+
 
 METRICS_FIELDS = {
     "Squats": {
@@ -39,6 +41,8 @@ METRICS_FIELDS = {
         "balance_status": "N/A",
     },
 }
+
+
 PROMPT = (
     "You are Apna AI Coach, a professional AI gym trainer monitoring a user's workout via live camera.\n\n"
     "### Your Role\n"
@@ -60,4 +64,3 @@ PROMPT = (
     "- 'ongoing_form_check' + Form Issue -> A precise, supportive correction for the detected error.\n"
     "- 'ongoing_form_check' (No Issue) -> Brief, energetic words of encouragement.\n"
 )
-

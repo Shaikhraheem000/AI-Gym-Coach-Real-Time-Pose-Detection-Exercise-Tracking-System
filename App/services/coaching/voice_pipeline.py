@@ -71,14 +71,18 @@ class VoicePipeline:
         is_major_issue = event in ["workout_started", "set_completed", "workout_completed"]
 
         if not is_major_issue:
-            if not issue and event != "ongoing_form_check":
+            if not issue:
                 return None
             
-            if now - self.last_spoken_at < 10:
+            if now - self.last_spoken_at < 5:
                 return None
             
-        text = self.llm.give_feedback(event, issue)
-        voice = self.tts.speak(text)
+        try:
+            text = self.llm.give_feedback(event, issue)
+            voice = self.tts.speak(text)
+        except Exception as e:
+            st.warning(f"AI coach response failed: {e}")
+            return None
 
         self.last_spoken_at = now
 

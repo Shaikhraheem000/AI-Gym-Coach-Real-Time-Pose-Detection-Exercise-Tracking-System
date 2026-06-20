@@ -29,7 +29,7 @@ class BaseExercise(ABC):
         return (p.x, p.y)
 
     @abstractmethod
-    def process(self, landmarks)->dict:
+    def process(self, landmarks):
         pass
 
     @abstractmethod

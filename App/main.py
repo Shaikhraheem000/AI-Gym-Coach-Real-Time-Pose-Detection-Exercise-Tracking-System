@@ -1,14 +1,12 @@
 import streamlit as st
 import os
 import time
-from dotenv import load_dotenv
-
-load_dotenv()
 import pandas as pd
+from dotenv import load_dotenv
 from services.auth.login_wall import render_login_wall
-from services.state.session_default import initial_session_defaults
+from services.state.session_defaults import initial_session_defaults
 from services.config.workout_config import EXERCISE_OPTIONS
-from services.ui.style_loader import load_css, inject_local_font, inject_webrtc_style
+from services.ui.style_loader import load_css, inject_local_font, inject_webrtc_styles
 from services.persistence.exercise_repository import init_db
 from streamlit_webrtc import webrtc_streamer, WebRtcMode
 from services.vision.exercise_video_processor import VideoProcessorClass
@@ -17,29 +15,9 @@ from services.persistence.exercise_repository import get_users_exercises
 from groq import Groq
 from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
-from services.coaching.voice_pipeline import VoicePipeline,autoplay_audio
+from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
 
-
-def get_ice_servers():
-    """Use Twilio's TURN server if credentials are provided (for cloud deployment), otherwise None (for local)."""
-    try:
-        account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
-        auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
-        if not account_sid or not auth_token:
-            if hasattr(st, "secrets") and "TWILIO_ACCOUNT_SID" in st.secrets:
-                account_sid = st.secrets["TWILIO_ACCOUNT_SID"]
-                auth_token = st.secrets["TWILIO_AUTH_TOKEN"]
-        
-        if account_sid and auth_token:
-            from twilio.rest import Client
-            client = Client(account_sid, auth_token)
-            token = client.tokens.create()
-            return token.ice_servers
-    except Exception as e:
-        print(f"Failed to fetch Twilio ICE servers: {e}")
-    
-    return None
-
+  
 def main():
     st.set_page_config(
         page_icon="🏋️‍♀️",
@@ -48,9 +26,9 @@ def main():
         layout="centered"
     )
 
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    load_css(os.path.join(current_dir, "static", "style.css"))
-    inject_local_font(os.path.join(current_dir, "static", "AdobeClean.otf"), "AdobeClean")
+    load_css(os.path.join(os.getcwd(), "static", "style.css"))
+    inject_local_font(os.path.join(os.getcwd(), "static", "AdobeClean.otf"), "AdobeClean")
+    load_dotenv(os.path.join(os.getcwd(), ".env"))
 
     init_db()
 
@@ -65,6 +43,11 @@ def main():
 
             if not api_key and hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
                 api_key = st.secrets["GROQ_API_KEY"]
+
+            if not api_key:
+                st.warning("GROQ_API_KEY is missing. Add it to App/.env to enable AI coach responses.")
+                st.session_state.voice_pipeline = None
+                return
             
             groq_client = Groq(api_key=api_key)
             llm_coach = LLMCoach(groq_client)
@@ -72,6 +55,7 @@ def main():
             st.session_state.voice_pipeline = VoicePipeline(llm_coach, tts)
         except Exception as e:
             st.session_state.voice_pipeline = None
+            st.warning(f"AI coach setup failed: {e}")
 
     workout_started = st.session_state.get("workout_started", False)
     
@@ -194,12 +178,10 @@ def main():
  
     if st.session_state.get("audio_to_play"):
         autoplay_audio(st.session_state.audio_to_play)
-        del st.session_state.audio_to_play
 
     if st.session_state.get("coach_feedback"):
         st.markdown("")
         st.success(f"🤖 **Coach:** {st.session_state.coach_feedback}")
-        del st.session_state.coach_feedback
 
     if not workout_started:
         st.markdown(
@@ -223,12 +205,11 @@ def main():
             unsafe_allow_html=True,
         )
     else:
-        ice_servers = get_ice_servers()
         context = webrtc_streamer(
             key="exercise-analysis",
             mode=WebRtcMode.SENDRECV,
             video_processor_factory=VideoProcessorClass,
-            rtc_configuration={"iceServers": ice_servers} if ice_servers else None,
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
             media_stream_constraints={
                 "video": True,
                 "audio": False
@@ -242,7 +223,7 @@ def main():
             time.sleep(0.25)
             st.rerun()
 
-        inject_webrtc_style()
+        inject_webrtc_styles()
 
     st.divider()
 
@@ -274,7 +255,7 @@ def main():
                 "Time (sec)": "sum"
             }).reset_index()
             agg_df.index += 1
-            st.table(agg_df)
+            st.table(agg_df, border="horizontal")
         else:
             st.info("No workout history found.")
 

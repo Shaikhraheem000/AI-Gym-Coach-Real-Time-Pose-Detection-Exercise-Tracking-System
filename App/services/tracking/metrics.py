@@ -104,7 +104,7 @@ def sync_metrics_update(context):
         if result:
             st.session_state.audio_to_play, st.session_state.coach_feedback = result
 
-    elif pose_detected and st.session_state.get("voice_pipeline"):
+    if st.session_state.get("voice_pipeline"):
         result = st.session_state.voice_pipeline.process_event(
             event="ongoing_form_check",
             exercise=exercise,
