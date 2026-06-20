@@ -26,6 +26,8 @@ class LLMCoach:
         )
 
         text = response.choices[0].message.content.strip()
+        
+        self.history.append({"role": "user", "content": prompt})
         self.history.append({"role": "assistant", "content": text})
 
         return text
