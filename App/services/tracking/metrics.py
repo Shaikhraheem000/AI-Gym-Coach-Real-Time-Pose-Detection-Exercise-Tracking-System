@@ -63,8 +63,23 @@ def sync_metrics_update(context):
         started_at = st.session_state.get("set_cycle_started_at", now_ts)
         time_taken = now_ts - started_at
         user_id = st.session_state.get("user_id", 0)
+        weight_kg = st.session_state.get("weight_kg", 70.0)
+        
+        # MET values for exercises
+        MET_VALUES = {
+            "squats": 5.0,
+            "pushups": 3.8,
+            "biceps_curls": 3.0,
+            "shoulder_press": 3.5,
+            "lunges": 4.0
+        }
+        met = MET_VALUES.get(exercise, 3.5)  # Default MET
+        
+        # Calories = (MET * Weight in kg * 3.5) / 200 * Time in minutes
+        time_minutes = time_taken / 60.0
+        calories_burned = (met * weight_kg * 3.5) / 200.0 * time_minutes
 
-        add_exercise(user_id, exercise, newly_completed * reps_per_set, newly_completed, time_taken)
+        add_exercise(user_id, exercise, newly_completed * reps_per_set, newly_completed, int(time_taken), calories_burned)
 
         if st.session_state.get("voice_pipeline"):
             result = st.session_state.voice_pipeline.process_event(

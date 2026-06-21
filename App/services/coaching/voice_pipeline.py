@@ -77,12 +77,28 @@ class VoicePipeline:
             if now - self.last_spoken_at < 5:
                 return None
             
+        text = ""
         try:
             text = self.llm.give_feedback(event, issue)
-            voice = self.tts.speak(text)
         except Exception as e:
-            st.warning(f"AI coach response failed: {e}")
-            return None
+            # Fallback text if LLM fails
+            if event == "workout_completed":
+                text = "Great job! Your workout is complete. Click End Workout."
+            elif event == "workout_started":
+                text = "Let's get started! Focus on your form."
+            elif event == "set_completed":
+                text = "Nice set! Take a quick breather."
+            else:
+                text = "Keep going! " + (issue if issue else "")
+            
+        voice = None
+        try:
+            if text:
+                voice = self.tts.speak(text)
+        except Exception as e:
+            # If Google TTS fails (Connection error), we just ignore the voice
+            # and still display the text.
+            pass
 
         self.last_spoken_at = now
 

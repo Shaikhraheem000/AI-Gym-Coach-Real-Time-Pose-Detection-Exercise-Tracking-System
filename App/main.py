@@ -63,7 +63,11 @@ def main():
         st.title("🏋️‍♂️ Apna AI Coach")
 
         if st.session_state.username:
-            st.caption(f"👤 Login as {st.session_state.username}")
+            st.caption(f"👤 Login as **{st.session_state.username}**")
+            if st.button("Logout", key="logout_main", use_container_width=True):
+                st.session_state.pop("user_id", None)
+                st.session_state.pop("username", None)
+                st.rerun()
 
         st.divider()
 
@@ -71,11 +75,8 @@ def main():
 
         if not workout_started:
             plan_exercise = st.selectbox("Exercise", options=EXERCISE_OPTIONS, key="plan_exercise")
-
             plan_sets = st.number_input("Sets", min_value=0, max_value=50, key="plan_sets", step=1)
-
             plan_reps = st.number_input("Reps per Set", min_value=0, max_value=50, key="plan_reps", step=1)
-
             st.markdown("")
 
             start_session_button = st.button("Start Workout", width="stretch", key="start_session_button")
@@ -88,6 +89,10 @@ def main():
                 st.session_state.workout_started = True
                 st.session_state.set_cycle_started_at = time.time()
                 st.session_state.last_saved_sets_completed = 0
+                
+                # Clear previous coach feedback
+                st.session_state.audio_to_play = None
+                st.session_state.coach_feedback = ""
 
                 if st.session_state.voice_pipeline:
                     result = st.session_state.voice_pipeline.process_event(
@@ -113,16 +118,8 @@ def main():
 
             if end_session_button:
                 st.session_state.workout_started = False
-                
-                if st.session_state.voice_pipeline:
-                    result = st.session_state.voice_pipeline.process_event(
-                        event="workout_completed",
-                        exercise=exercise,
-                        metrics={}
-                    )
-                    if result:
-                        st.session_state.audio_to_play, st.session_state.coach_feedback = result
-
+                st.session_state.audio_to_play = None
+                st.session_state.coach_feedback = ""
                 st.rerun()
 
         if workout_started:
@@ -236,11 +233,12 @@ def main():
 
         arr = [
             {
-                "Exercise": row['exercise_name'],
+                "Exercise": row['exercise_name'].replace('_', ' ').title(),
                 "Reps": row['reps'],
                 "Sets": row['sets'],
-                "Time (sec)": row['time'],
-                "Date": row['created_at']
+                "Time (sec)": row.get('time_seconds', 0),
+                "Calories": round(row.get('calories_burned', 0.0), 1),
+                "Date": row['created_at'][:10]
             }
             for row in history_rows
         ]
@@ -252,14 +250,14 @@ def main():
             agg_df = df.groupby(["Exercise", "Date"]).agg({
                 "Reps": 'sum',
                 "Sets": "sum",
-                "Time (sec)": "sum"
+                "Time (sec)": "sum",
+                "Calories": "sum"
             }).reset_index()
             agg_df.index += 1
-            st.table(agg_df, border="horizontal")
+            st.table(agg_df)
         else:
             st.info("No workout history found.")
 
 
 if __name__ == "__main__":
     main()
-    
