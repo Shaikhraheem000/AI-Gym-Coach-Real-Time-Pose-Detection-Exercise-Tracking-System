@@ -1,18 +1,21 @@
 /* =========================================================
-   GLOBAL THEME
+   GLOBAL THEME & GLASSMORPHISM
 ========================================================= */
 
 .stApp {
-  background-color: #0A0D14;
-  color: #fff;
+  background-color: #0E1117;
+  color: #FAFAFA;
 }
 
 [data-testid="stSidebar"] {
-  background-color: #111520;
+  background-color: rgba(26, 28, 36, 0.6) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* =========================================================
-   TYPOGRAPHY (SCOPED – safer)
+   TYPOGRAPHY
 ========================================================= */
 
 .block-container,
@@ -20,27 +23,53 @@
   font-family: 'AdobeClean', sans-serif !important;
 }
 
-/* =========================================================
-   LAYOUT
-========================================================= */
-
 .block-container {
   padding: 50px 3rem !important;
-  max-width: 750px !important;
+  max-width: 800px !important;
 }
 
 /* =========================================================
-   BUTTONS
+   BUTTONS & ANIMATIONS (ELECTRIC BLUE ACCENTS)
 ========================================================= */
 
 button,
 .stButton button,
 .stDownloadButton button,
 .MuiBox-root button {
-  background-color: #181D2A !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0 !important;
+  background-color: rgba(26, 28, 36, 0.8) !important;
+  border: 1px solid rgba(0, 229, 255, 0.3) !important; /* Subtle Electric Blue border */
+  border-radius: 8px !important;
   font-family: 'AdobeClean', sans-serif !important;
+  color: #FAFAFA !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+button:hover,
+.stButton button:hover,
+.stDownloadButton button:hover {
+  background-color: rgba(0, 229, 255, 0.1) !important;
+  border-color: #00E5FF !important;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4), 0 0 20px rgba(0, 229, 255, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+button:active,
+.stButton button:active {
+  transform: translateY(0);
+  box-shadow: 0 0 5px rgba(0, 229, 255, 0.5) !important;
+}
+
+/* Primary Button Override */
+[data-testid="baseButton-primary"] {
+  background-color: rgba(0, 229, 255, 0.8) !important;
+  color: #000 !important;
+  font-weight: 600 !important;
+  border: none !important;
+}
+
+[data-testid="baseButton-primary"]:hover {
+  background-color: #00E5FF !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.6), 0 0 30px rgba(0, 229, 255, 0.4) !important;
 }
 
 /* =========================================================
@@ -56,19 +85,36 @@ code,
 [data-baseweb="select"] > div,
 [data-baseweb="popover"] ul,
 [data-baseweb="menu"] {
-  border-radius: 0 !important;
+  border-radius: 8px !important;
   font-family: 'AdobeClean', sans-serif !important;
 }
 
+/* Focus states for inputs */
+[data-baseweb="select"] > div:focus-within,
+input:focus {
+  border-color: #00E5FF !important;
+  box-shadow: 0 0 0 1px #00E5FF !important;
+}
+
 /* =========================================================
-   METRICS
+   METRICS (GLASSMORPHISM CARDS)
 ========================================================= */
 
 [data-testid="stMetric"] {
-  background-color: #181D2A;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 1rem 1.2rem;
-  border-radius: 0;
+  background-color: rgba(26, 28, 36, 0.6) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-testid="stMetric"]:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 229, 255, 0.15);
+  border-color: rgba(0, 229, 255, 0.3);
 }
 
 [data-testid="stMetric"] div {
@@ -78,104 +124,56 @@ code,
 }
 
 [data-testid="stMetricValue"] {
-  font-size: 1.5rem !important;
-  font-weight: 400 !important;
+  font-size: 1.8rem !important;
+  font-weight: 600 !important;
+  color: #00E5FF !important; /* Electric Blue Text for Values */
 }
 
 [data-testid="stMetricLabel"] {
-  font-size: 15px !important;
-  opacity: 0.6;
-}
-
-[data-testid="stMetric"] div label p {
-  font-size: 16px !important;
+  font-size: 14px !important;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* =========================================================
    CONTAINERS / CARDS
 ========================================================= */
 
-.stContainer,
-.stExpander,
-.stTabs,
-.stColumns,
-.stPopover,
-.stAlertContainer,
-.stStatusContainer,
-.stMetric,
-.stTable,
-.stDataFrame,
-.stForm,
-.stSelectbox,
-[data-baseweb="select"] > div,
-[data-testid="stForm"],
-[data-testid="stMetric"],
-[data-testid="stNumberInputContainer"],
-[data-testid="stDataFrameColumnMenu"],
-[data-testid="stHeadingWithActionElements"],
-[data-testid="stCaptionContainer"] p,
-[data-testid="stAlertContentInfo"] p,
-[data-testid="stSidebarNavLink"],
-[data-testid="stMarkdownContainer"] h3,
-[data-baseweb="popover"],
-[data-baseweb="menu"],
-div[role="menu"],
-div[role="menuitem"] {
-  border-radius: 0 !important;
-  font-family: 'AdobeClean', sans-serif !important;
-}
-
-/* =========================================================
-   DATAFRAME FIX
-========================================================= */
-
-.stDataFrame,
-.stDataFrame div,
-.stDataFrameGlideDataEditor {
-  border-radius: 0 !important;
-  font-family: 'AdobeClean', sans-serif !important;
-}
-
-/* =========================================================
-   INTERACTIVE ELEMENTS
-========================================================= */
-
-.stTextInput,
-.stTextArea,
-.stNumberInput,
-.stSlider,
-.stMultiselect,
-.stRadio,
-.stCheckbox,
-.stToggle,
-.stFileUploader,
-.stColorPicker,
-.stDateInput,
-.stTimeInput,
-.stCameraInput,
-[data-testid="stTextInput"] > div,
-[data-testid="stButton"] button,
-[data-testid="stBaseButton-secondaryFormSubmit"],
-[data-testid="stStatusWidget"] {
-  border-radius: 0 !important;
-  font-family: 'AdobeClean', sans-serif !important;
-}
-
-/* =========================================================
-   MARKDOWN
-========================================================= */
-
-[data-testid="stMarkdownContainer"] strong {
-  font-family: 'AdobeClean', sans-serif !important;
-}
-
-/* =========================================================
-   FORM
-========================================================= */
-
 .stForm {
   margin-top: 2rem !important;
-  padding: 1.5rem 1rem !important;
-  background-color: #181D2A !important;
-  color: #fff;
+  padding: 2rem !important;
+  background-color: rgba(26, 28, 36, 0.6) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  color: #FAFAFA;
+}
+
+/* =========================================================
+   CUSTOM PULSE ANIMATION (For empty states)
+========================================================= */
+
+@keyframes neonPulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(0, 229, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+}
+
+.empty-state-box {
+  border: 2px dashed rgba(0, 229, 255, 0.5);
+  border-radius: 16px;
+  padding: 48px 32px;
+  text-align: center;
+  color: #888;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  background-color: rgba(0, 229, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+.empty-state-box:hover {
+  border-color: #00E5FF;
+  background-color: rgba(0, 229, 255, 0.05);
+  animation: neonPulse 2s infinite;
 }

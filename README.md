@@ -1,63 +1,65 @@
 # 🏋️‍♂️ Apna AI Coach
 
-![App Demo](https://img.shields.io/badge/Status-Live-brightgreen) ![Python](https://img.shields.io/badge/Python-3.11+-blue) ![Streamlit](https://img.shields.io/badge/Streamlit-App-red)
+![Apna AI Coach Banner](https://img.shields.io/badge/Status-Live-success?style=for-the-badge) ![Python](https://img.shields.io/badge/Python-3.10+-blue?style=for-the-badge&logo=python) ![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit) ![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase)
 
-**Apna AI Coach** is a real-time computer vision fitness tracking application. It uses your webcam to track your exercise posture, count repetitions, and provides proactive AI voice coaching to ensure your form is perfect.
+**Summary**  
+Apna AI Coach is an intelligent, real-time fitness coaching application built with Streamlit. It tracks your exercise form using computer vision, provides proactive AI voice feedback, securely stores your workout history in the cloud, and offers insightful analytics.
 
-### 🔗 Quick Links
-* **Landing Page:** [https://apna-ai-coach.netlify.app/](https://apna-ai-coach.netlify.app/)
-* **Live App (Streamlit):** [Try the App Here](https://ai-gym-coach-real-time-pose-detection-exercise-tracking-system.streamlit.app/)
-* **GitHub Repository:** [Source Code](https://github.com/Shaikhraheem000/AI-Gym-Coach-Real-Time-Pose-Detection-Exercise-Tracking-System/)
-
----
-
-## ✨ Key Features
-* **Real-Time Pose Detection:** Uses MediaPipe to track 33 body landmarks instantly.
-* **Exercise Tracking:** Automatically counts reps and sets for multiple exercises:
-  * Squats (Tracks Depth)
-  * Push-ups (Tracks Body Alignment & Hip Status)
-  * Biceps Curls (Tracks Arm Swing)
-  * Shoulder Press (Tracks Extension & Back Arch)
-  * Lunges (Tracks Balance)
-* **Proactive Voice Coaching:** Powered by the incredibly fast Groq LLM API. The AI actively talks to you during your workout, encouraging you and correcting your form based on live metrics.
-* **Privacy First:** All video processing is done entirely within your browser using WebRTC; video streams are never saved or uploaded.
+🔗 **Quick Links**
+* **Landing Page**: [https://apna-ai-coach.netlify.app/](https://apna-ai-coach.netlify.app/)
+* **Live App (Streamlit)**: [Try the App Here](https://ai-gym-coach-real-time-pose-detection-exercise-tracking-system.streamlit.app/)
+* **GitHub Repository**: [Source Code](https://github.com/Shaikhraheem000/AI-Gym-Coach-Real-Time-Pose-Detection-Exercise-Tracking-System)
 
 ---
 
-## 🛠️ Technology Stack
-* **Frontend/UI:** Streamlit, Vanilla HTML/CSS (Landing Page)
-* **Computer Vision:** OpenCV, Google MediaPipe (Pose Landmarker)
-* **Video Streaming:** `streamlit-webrtc`
-* **AI Engine:** Groq API (LLM) & gTTS (Voice Synthesis)
-* **Deployment:** Netlify (Frontend) & Streamlit Community Cloud (Backend)
+## **Key Features**
+* **Real-Time Pose Detection**: Form analysis for Squats, Push-ups, Lunges, Biceps Curls, and Shoulder Presses using MediaPipe.
+* **Proactive AI Voice Coaching**: Instant, personalized verbal feedback using the Groq API.
+* **Cloud Authentication & Database**: Secure user logins and workout tracking powered by Supabase.
+* **Interactive Analytics Dashboard**: Beautiful visual trends of your workouts and calories burned using Plotly.
+* **PDF Workout Reports**: Automatically generate clean summaries of your fitness history.
 
 ---
 
-## 🚀 Running Locally
-
-If you want to run this app on your own machine:
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Shaikhraheem000/AI-Gym-Coach-Real-Time-Pose-Detection-Exercise-Tracking-System.git
-   cd AI-Gym-Coach-Real-Time-Pose-Detection-Exercise-Tracking-System
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   pip install -r App/requirements.txt
-   ```
-
-3. **Set up Environment Variables:**
-   Create a `.env` file inside the `App/` folder and add your API keys:
-   ```env
-   GROQ_API_KEY=your_groq_api_key
-   ```
-
-4. **Run the app:**
-   ```bash
-   streamlit run App/main.py
-   ```
+## **Technology Stack**
+* **Frontend**: Streamlit, Custom CSS (Glassmorphism), Plotly Express
+* **Backend**: Supabase (PostgreSQL), Python bcrypt
+* **Computer Vision**: OpenCV, MediaPipe
+* **AI Integration**: Groq API, TTS
+* **Reporting**: FPDF2
 
 ---
-*Built with ❤️ to make personal fitness training accessible to everyone.*
+
+## **Installation**
+Clone the repository and install the required dependencies:
+```bash
+git clone https://github.com/yourusername/Apna-AI-Coach.git
+cd Apna-AI-Coach
+python -m venv .venv
+
+# Activate Virtual Environment
+# Windows:
+.venv\Scripts\activate
+# Mac/Linux:
+source .venv/bin/activate
+```
+
+**Requirements**
+Install the dependencies inside your virtual environment:
+```bash
+pip install -r App/requirements.txt
+```
+
+---
+
+## **Environment Variables**
+Create a `.env` file inside the `App/` directory with the following keys:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_KEY=your_supabase_anon_key
+```
+
+---
+
+*created with 💖 shaikh raheem*
