@@ -21,3 +21,5 @@ wheels/
 *.egg
 data.db
 .streamlit/
+*.pdf
+temp/
